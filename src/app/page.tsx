@@ -1,173 +1,246 @@
-import React from "react";
 import Link from "next/link";
-import { ArrowUpRight, Cpu, Sparkles, Terminal, Code } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { ProjectCard } from "@/components/ProjectCard";
-import { projects } from "@/data/projects";
+import { JalTarang } from "@/components/JalTarang";
+import { ProjectMedia } from "@/components/ProjectMedia";
+import { LiveDot } from "@/components/LiveDot";
+import { EnquiryLink } from "@/components/ContactForm";
+import { projects, site, webWork } from "@/data/projects";
+
+const services = [
+  { title: "Design & build", body: "Professional, animated, interactive websites for local businesses, from concept to launch." },
+  { title: "Deploy & SEO", body: "Going live, set up properly, and easy to find on search engines." },
+  { title: "Penetration testing", body: "Checking client sites for security weaknesses before and after launch." },
+  { title: "Fix & upgrade", body: "Repairing, redesigning and improving existing business websites." },
+];
+
+const practice = [
+  {
+    n: "01",
+    title: "Physical",
+    body: "Everyday objects as interfaces: water, glass and touch, sensed by Arduino and answered with sound and light.",
+  },
+  {
+    n: "02",
+    title: "Screen",
+    body: "Interactive sketches, small games and websites where motion and feedback make the interaction feel alive.",
+  },
+  {
+    n: "03",
+    title: "Visual",
+    body: "Identity systems and layouts built on typography and the grid, designed to hold together across formats.",
+  },
+];
+
+const now = [
+  { k: "Studying", v: "B.Des, Interaction & Communication Design, Anant National University (Year 3)" },
+  { k: "Freelancing", v: "Designing and developing websites for local businesses, since July 2026" },
+  { k: "Leading", v: "Co-founder of the Anant Motorsports Club, running race screenings on campus" },
+  { k: "Exploring", v: "Projection mapping and larger-scale interactive installations" },
+];
 
 export default function Home() {
-  // Selected Work: Display first 4 projects from the projects array
-  const selectedProjects = projects.slice(0, 4);
+  const featured = projects.find((p) => p.slug === "jal-tarang")!;
+  const rest = projects.filter((p) => p.featured && p.slug !== "jal-tarang");
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-black overflow-x-hidden">
-      <Navbar />
-
-      <main className="flex-grow pt-32 md:pt-44 pb-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-24 md:space-y-36">
-          {/* HERO SECTION - Left Aligned */}
-          <section className="space-y-8 border-b border-neutral-900 pb-16 md:pb-24 relative">
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-neutral-400 uppercase tracking-widest">
-                <span className="w-2.5 h-2.5 bg-emerald-400 animate-pulse inline-block shadow-[0_0_10px_#34d399]" />
-                <span className="border border-neutral-800 px-2 py-0.5 text-neutral-300">
-                  PORTFOLIO 2026
-                </span>
-                <span className="text-neutral-500">//</span>
-                <span className="text-cyan-400 font-semibold drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
-                  PHYSICAL COMPUTING & CREATIVE CODING
-                </span>
-              </div>
-
-              {/* Stark Large Name Header */}
-              <h1 className="text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tight text-white leading-none">
-                HARSH <br className="hidden sm:inline" />
-                ALAMBAIN
-              </h1>
-
-              <div className="flex items-center space-x-3 pt-2">
-                <span className="font-mono text-lg md:text-2xl font-bold uppercase tracking-widest text-neutral-300 border-l-2 border-cyan-400 pl-4 py-1">
-                  INTERACTION DESIGNER
-                </span>
-              </div>
-            </div>
-
-            {/* Bio */}
-            <p className="text-xl md:text-3xl font-light text-neutral-300 leading-relaxed max-w-3xl font-sans">
-              I design interactive experiences that connect technology, physical interaction and visual storytelling.
+    <>
+      {/* HERO */}
+      <section className="mx-auto max-w-[1280px] px-5 md:px-10 pt-32 md:pt-40 pb-20 md:pb-28">
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-10 items-end">
+          <div className="lg:col-span-7">
+            <p data-reveal className="inline-flex items-center gap-2 text-[14px] text-ink-2">
+              <LiveDot />
+              Interaction Designer · Open to internships
             </p>
-
-            {/* Interactive Capability Chips & WebGL Glow CTA Buttons */}
-            <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-t border-neutral-900">
-              <div className="flex flex-wrap gap-2.5 font-mono text-xs">
-                <span className="flex items-center space-x-2 bg-neutral-900 border border-neutral-800 text-neutral-300 px-3 py-1.5 transition-all duration-300 hover:border-cyan-500/60 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:text-cyan-300">
-                  <Cpu className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Arduino & Sensors</span>
-                </span>
-                <span className="flex items-center space-x-2 bg-neutral-900 border border-neutral-800 text-neutral-300 px-3 py-1.5 transition-all duration-300 hover:border-fuchsia-500/60 hover:shadow-[0_0_15px_rgba(217,70,239,0.4)] hover:text-fuchsia-300">
-                  <Terminal className="w-3.5 h-3.5 text-fuchsia-400" />
-                  <span>TouchDesigner</span>
-                </span>
-                <span className="flex items-center space-x-2 bg-neutral-900 border border-neutral-800 text-neutral-300 px-3 py-1.5 transition-all duration-300 hover:border-amber-400/60 hover:shadow-[0_0_15px_rgba(251,191,36,0.4)] hover:text-amber-300">
-                  <Code className="w-3.5 h-3.5 text-amber-400" />
-                  <span>p5.js & WebGL</span>
-                </span>
-              </div>
-
-              <div className="flex items-center space-x-4 font-mono text-xs">
-                <Link
-                  href="/projects"
-                  className="group inline-flex items-center space-x-2 bg-white text-black hover:bg-neutral-100 font-bold px-5 py-3 transition-all duration-300 active:scale-95 uppercase tracking-wider hover:shadow-[0_0_25px_rgba(255,255,255,0.8)]"
-                >
-                  <span>VIEW ALL PROJECTS</span>
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Link>
-                <Link
-                  href="/projects/jal-tarang"
-                  className="inline-flex items-center space-x-2 bg-neutral-900 text-neutral-300 hover:text-white hover:bg-neutral-800 border border-neutral-800 hover:border-cyan-500/60 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] px-5 py-3 transition-all duration-300 font-mono uppercase tracking-wider active:scale-95"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>CASE STUDY</span>
-                </Link>
-              </div>
-            </div>
-          </section>
-
-          {/* SELECTED WORK SECTION */}
-          <section className="space-y-12">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-neutral-900 pb-6">
-              <div>
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="w-2 h-2 bg-cyan-400 inline-block shadow-[0_0_8px_#22d3ee]" />
-                  <span className="font-mono text-xs uppercase tracking-widest text-neutral-400 font-semibold">
-                    SELECTED WORK
-                  </span>
-                </div>
-                <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tight text-white">
-                  CURATED PROJECTS
-                </h2>
-              </div>
-
+            <h1
+              data-reveal
+              style={{ ["--reveal-delay" as string]: "80ms" }}
+              className="mt-6 font-display text-[clamp(2.75rem,7.2vw,6.25rem)] font-semibold leading-[0.95] tracking-[-0.035em]"
+            >
+              I design interactions you can <span className="text-accent">touch</span>, play and see.
+            </h1>
+            <p
+              data-reveal
+              style={{ ["--reveal-delay" as string]: "160ms" }}
+              className="mt-8 max-w-[34rem] text-[17px] md:text-[19px] leading-relaxed text-ink-2"
+            >
+              I&apos;m Harsh Alambain, an Interaction &amp; Communication Design student at Anant National University.
+              I build physical–digital prototypes, interactive web experiences and visual identities, and I design and
+              develop websites for local businesses.
+            </p>
+            <div
+              data-reveal
+              style={{ ["--reveal-delay" as string]: "240ms" }}
+              className="mt-10 flex flex-wrap items-center gap-3"
+            >
               <Link
-                href="/projects"
-                className="group font-mono text-xs uppercase tracking-widest text-neutral-400 hover:text-cyan-400 flex items-center space-x-2 transition-colors self-start md:self-auto hover:drop-shadow-[0_0_10px_rgba(6,182,212,0.8)] active:scale-95"
+                href="#work"
+                className="pop glow group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-paper"
               >
-                <span>EXPLORE ALL 06 PROJECTS</span>
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                See selected work
+                <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
               </Link>
-            </div>
-
-            {/* Minimalist Grid - Explicitly mapping over projects data array */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {selectedProjects.map((project, idx) => (
-                <ProjectCard key={project.id} project={project} priority={idx < 2} />
-              ))}
-            </div>
-
-            <div className="pt-8 text-center">
-              <Link
-                href="/projects"
-                className="inline-block font-mono text-xs uppercase tracking-widest text-neutral-300 hover:text-white border border-neutral-800 hover:border-cyan-500/80 bg-neutral-900/60 px-8 py-4 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] active:scale-95"
+              <a
+                href={site.resume}
+                target="_blank"
+                rel="noopener"
+                className="pop inline-flex items-center gap-2 rounded-full border border-ink/25 px-6 py-3.5 text-[15px] hover:border-ink"
               >
-                [ VIEW ALL 06 PROJECTS IN CATALOGUE ]
-              </Link>
+                Download résumé
+              </a>
             </div>
-          </section>
+          </div>
 
-          {/* EXPERIMENTAL APPROACH / MANIFESTO */}
-          <section className="bg-neutral-900/40 border border-neutral-800 p-8 md:p-14 space-y-6 relative overflow-hidden transition-all duration-300 hover:border-fuchsia-500/60 hover:shadow-[0_0_35px_rgba(217,70,239,0.2)]">
-            <div className="absolute top-4 right-4 font-mono text-[10px] text-neutral-600">
-              [SYSTEM_MANIFESTO // IXD]
+          <div
+            data-reveal
+            style={{ ["--reveal-delay" as string]: "300ms" }}
+            className="lg:col-span-5 rounded-[10px] border border-line bg-paper-2/60 p-6 md:p-8"
+          >
+            <div className="flex items-baseline justify-between">
+              <p className="label">Try it · Jal Tarang</p>
+              <p className="label hidden sm:block">Tap a glass or press 1–6</p>
             </div>
-
-            <div className="space-y-3 max-w-3xl">
-              <span className="font-mono text-xs uppercase tracking-widest text-fuchsia-400 font-semibold drop-shadow-[0_0_8px_rgba(217,70,239,0.8)]">
-                03 // DESIGN PHILOSOPHY
-              </span>
-              <h3 className="text-2xl md:text-4xl font-bold text-white tracking-tight">
-                Where Physical Objects Become Generative Instruments
-              </h3>
-              <p className="text-neutral-400 text-base md:text-lg leading-relaxed font-sans pt-2">
-                I explore physical computing, algorithmic artwork, and interactive sound. By treating conductive materials, microcontrollers, and motion graphics as unified design primitives, I create tactile feedback loops that transform static interfaces into dynamic sensory environments.
-              </p>
+            <div className="mt-6">
+              <JalTarang />
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-neutral-800 font-mono text-xs">
-              <div className="p-4 bg-neutral-950/60 border border-neutral-900 hover:border-cyan-500/60 hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all">
-                <span className="text-cyan-400 font-bold block mb-1">01 / PHYSICAL TACTILITY</span>
-                <p className="text-neutral-500 text-[11px]">
-                  Conductive sensors, water, and microcontrollers as tangible interface controls.
-                </p>
-              </div>
-              <div className="p-4 bg-neutral-950/60 border border-neutral-900 hover:border-fuchsia-500/60 hover:shadow-[0_0_15px_rgba(217,70,239,0.3)] transition-all">
-                <span className="text-fuchsia-400 font-bold block mb-1">02 / CREATIVE CODING</span>
-                <p className="text-neutral-500 text-[11px]">
-                  Generative algorithms, fluid physics, and real-time p5.js canvas experiments.
-                </p>
-              </div>
-              <div className="p-4 bg-neutral-950/60 border border-neutral-900 hover:border-amber-400/60 hover:shadow-[0_0_15px_rgba(251,191,36,0.3)] transition-all">
-                <span className="text-amber-400 font-bold block mb-1">03 / VISUAL & MOTORSPORTS</span>
-                <p className="text-neutral-500 text-[11px]">
-                  Precision telemetry, race mechanics, and stark grid typography systems.
-                </p>
-              </div>
-            </div>
-          </section>
+            <Link
+              href="/projects/jal-tarang"
+              className="mt-6 inline-flex items-center gap-1 text-[14px] text-ink-2 link-underline hover:text-ink"
+            >
+              How the real installation works
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
-      </main>
+      </section>
 
-      <Footer />
-    </div>
+      {/* SELECTED WORK */}
+      <section id="work" className="mx-auto max-w-[1280px] px-5 md:px-10 pb-24 md:pb-32">
+        <div className="flex items-end justify-between border-t border-line pt-8 mb-10 md:mb-14">
+          <h2 className="font-display text-3xl md:text-5xl font-semibold tracking-[-0.03em]">Selected work</h2>
+          <Link href="/projects" className="text-[15px] link-underline inline-flex items-center gap-1">
+            All projects <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <ProjectCard project={featured} size="large" />
+
+        <div className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-3">
+          {rest.map((p, i) => (
+            <ProjectCard key={p.slug} project={p} delay={i * 90} />
+          ))}
+        </div>
+      </section>
+
+      {/* CLIENT WORK */}
+      <section className="bg-paper-2/70 border-y border-line">
+        <div className="mx-auto max-w-[1280px] px-5 md:px-10 py-20 md:py-28 grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-5" data-reveal>
+            <p className="label">Client work · July 2026 – present</p>
+            <h2 className="mt-4 font-display text-3xl md:text-5xl font-semibold tracking-[-0.03em] leading-[1.02]">
+              Freelance web design &amp; development
+            </h2>
+            <p className="mt-6 max-w-md text-[17px] leading-relaxed text-ink-2">
+              I help local businesses get online with websites that feel crafted, not templated: animated, interactive
+              and built to work hard for the business.
+            </p>
+            <EnquiryLink
+              topic="Website samples"
+              className="pop glow mt-8 inline-flex items-center gap-2 rounded-full border border-ink/25 px-5 py-3 text-[15px] hover:border-ink"
+            >
+              Ask me for more samples <ArrowUpRight className="h-4 w-4" />
+            </EnquiryLink>
+          </div>
+          <ul className="lg:col-span-7 grid sm:grid-cols-2 gap-px bg-line rounded-[8px] overflow-hidden border border-line">
+            {services.map((s, i) => (
+              <li
+                key={s.title}
+                data-reveal
+                style={{ ["--reveal-delay" as string]: `${i * 80}ms` }}
+                className="group bg-paper p-6 md:p-8 transition-colors hover:bg-paper-2"
+              >
+                <p className="label">0{i + 1}</p>
+                <h3 className="mt-6 font-display text-xl font-semibold tracking-tight group-hover:text-accent transition-colors">
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{s.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {webWork.map((w) => (
+          <div key={w.slug} className="mx-auto max-w-[1280px] px-5 md:px-10 pb-20 md:pb-28">
+            <div data-reveal className="grid gap-8 rounded-[10px] border border-white/5 bg-night p-4 md:p-6 text-day lg:grid-cols-12 lg:gap-10">
+              <div className="lg:col-span-8 overflow-hidden rounded-[6px] bg-black aspect-[16/9]">
+                <ProjectMedia src={w.mediaUrl} type="video" alt={`${w.title} concept website walkthrough`} autoplayInView />
+              </div>
+              <div className="lg:col-span-4 flex flex-col p-2 md:p-4">
+                <p className="label text-day/50!">{w.kind}</p>
+                <h3 className="mt-3 font-display text-3xl md:text-4xl font-semibold tracking-[-0.03em]">
+                  {w.title}
+                  <span className="text-day/40">, {w.place}</span>
+                </h3>
+                <ul className="mt-6 flex flex-wrap gap-2">
+                  {w.features.map((f) => (
+                    <li key={f} className="rounded-full border border-day/20 px-3 py-1 text-[13px] text-day/80">
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-auto pt-8 text-[13px] leading-relaxed text-day/50">{w.note}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* PRACTICE */}
+      <section className="mx-auto max-w-[1280px] px-5 md:px-10 py-24 md:py-32">
+        <h2 data-reveal className="max-w-3xl font-display text-3xl md:text-5xl font-semibold tracking-[-0.03em] leading-[1.05]">
+          One practice across three surfaces: the physical, the screen and the visual.
+        </h2>
+        <div className="mt-14 grid gap-10 md:grid-cols-3">
+          {practice.map((p, i) => (
+            <div
+              key={p.n}
+              data-reveal
+              style={{ ["--reveal-delay" as string]: `${i * 90}ms` }}
+              className="border-t border-ink pt-5"
+            >
+              <p className="label">{p.n}</p>
+              <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight">{p.title}</h3>
+              <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* NOW */}
+      <section className="mx-auto max-w-[1280px] px-5 md:px-10 pb-24 md:pb-32">
+        <div className="grid gap-10 lg:grid-cols-12 border-t border-line pt-8">
+          <div className="lg:col-span-4">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-[-0.03em]">Right now</h2>
+            <Link href="/about" className="mt-4 inline-flex items-center gap-1 text-[15px] link-underline">
+              More about me <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <dl className="lg:col-span-8 divide-y divide-line">
+            {now.map((row, i) => (
+              <div
+                key={row.k}
+                data-reveal
+                style={{ ["--reveal-delay" as string]: `${i * 70}ms` }}
+                className="grid gap-1 py-5 sm:grid-cols-[10rem_1fr] sm:gap-4"
+              >
+                <dt className="label pt-1">{row.k}</dt>
+                <dd className="text-[17px] leading-snug">{row.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    </>
   );
 }

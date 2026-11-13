@@ -1,38 +1,186 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme tokens. Light is the default; .dark on <html> swaps them. */
+:root {
+  --paper: #f3f1ec;
+  --paper-2: #e9e6df;
+  --ink: #141414;
+  --ink-2: #3a3936;
+  --muted: #6e6c66;
+  --line: #d9d5cc;
+  --accent: #d2401e;
+  --water: #6aa6c8;
+  --glow: rgb(210 64 30 / 0.38);
+  --lift-shadow: 0 12px 28px -14px rgb(20 20 20 / 0.45);
+}
+.dark {
+  --paper: #111110;
+  --paper-2: #1a1a18;
+  --ink: #edebe6;
+  --ink-2: #bdbab3;
+  --muted: #8b8982;
+  --line: #2d2c29;
+  --accent: #ff5b36;
+  --water: #4d8fb3;
+  --glow: rgb(255 91 54 / 0.5);
+  --lift-shadow: 0 14px 30px -14px rgb(0 0 0 / 0.9);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-water: var(--water);
+  /* Fixed colours for always-dark sections (footer, showcase cards) */
+  --color-night: #141414;
+  --color-day: #f3f1ec;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
 @layer base {
-  :root {
-    --background: #09090b;
-    --foreground: #f4f4f5;
-  }
-
   html {
-    scroll-behavior: smooth;
-    background-color: #09090b;
-    color: #f4f4f5;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-text-size-adjust: 100%;
   }
-
   body {
-    background-color: #09090b;
-    color: #f4f4f5;
-    font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
+  }
+  ::selection {
+    background: var(--accent);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  [id] {
+    scroll-margin-top: 96px;
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+/* Small mono label used for section eyebrows and metadata */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-::-webkit-scrollbar-track {
-  background: #09090b;
+/* Animated underline for text links */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  &:hover {
+    background-size: 100% 1px;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #27272a;
+/* Buttons lift slightly on hover and press down on click */
+@utility pop {
+  transition:
+    transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+  will-change: transform;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lift-shadow);
+  }
+  &:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: none;
+    transition-duration: 0.08s;
+  }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
+/* A touch of accent glow, for primary actions only */
+@utility glow {
+  &:hover,
+  &:focus-visible {
+    box-shadow:
+      var(--lift-shadow),
+      0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent),
+      0 8px 30px -6px var(--glow);
+  }
+}
+
+/* Live status dot: a gentle fade, so it keeps blinking even with reduced motion */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+@keyframes halo {
+  0% { transform: scale(1); opacity: 0.55; }
+  80%, 100% { transform: scale(2.6); opacity: 0; }
+}
+.live-dot {
+  animation: blink 1.6s ease-in-out infinite;
+  box-shadow: 0 0 10px var(--glow);
+}
+.live-halo {
+  animation: halo 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Scroll reveal: only hides content once JS has confirmed it can reveal it */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Water surface wobble when a glass is played */
+@keyframes slosh {
+  0% { transform: translateY(0) scaleY(1); }
+  20% { transform: translateY(-3px) scaleY(1.04); }
+  45% { transform: translateY(2px) scaleY(0.98); }
+  70% { transform: translateY(-1px) scaleY(1.01); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+@keyframes ring {
+  0% { opacity: 0.55; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+
+/* Reduced motion: drop large movement, keep small hover feedback and the status blink */
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .live-halo,
+  [style*="slosh"],
+  [style*="ring"] {
+    animation: none !important;
+  }
 }

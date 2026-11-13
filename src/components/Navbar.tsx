@@ -1,133 +1,134 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { site } from "@/data/projects";
+import { ThemeToggle } from "./ThemeToggle";
+
+const links = [
+  { name: "Work", href: "/projects" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "#contact" },
+];
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Hide while scrolling down, reveal on scroll up.
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 12);
+      setHidden(y > 240 && y > last + 4);
+      if (y < last - 4) setHidden(false);
+      last = y;
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const raf = requestAnimationFrame(onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Projects", href: "/projects" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/#contact" },
-  ];
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+  }, [open]);
+
+  const isActive = (href: string) => href.startsWith("/") && pathname.startsWith(href);
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-          ? "bg-neutral-950/90 backdrop-blur-md border-b border-neutral-800/80 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
-          : "bg-transparent py-6"
-        }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.2,0.7,0.2,1)] border-b ${
+        hidden && !open ? "-translate-y-full" : "translate-y-0"
+      } ${scrolled || open ? "bg-paper/85 backdrop-blur-md border-line" : "bg-transparent border-transparent"}`}
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        {/* Brand Mark with WebGL Glow */}
-        <Link
-          href="/"
-          className="group flex items-center space-x-3 text-white font-mono tracking-tight font-bold text-sm md:text-base transition-all duration-300 active:scale-95"
-        >
-          <span className="w-2.5 h-2.5 bg-cyan-400 group-hover:scale-125 group-hover:shadow-[0_0_12px_#22d3ee] transition-all duration-300 inline-block" />
-          <span className="uppercase tracking-widest text-neutral-100 group-hover:text-cyan-300 group-hover:drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">
-            HARSH ALAMBAIN
-          </span>
-          <span className="text-[10px] text-neutral-500 font-normal tracking-widest hidden sm:inline-block border border-neutral-800 group-hover:border-cyan-500/60 px-1.5 py-0.5 transition-colors">
-            IXD // 2026
+      <div className="mx-auto max-w-[1280px] px-5 md:px-10 h-16 flex items-center justify-between">
+        <Link href="/" className="group flex items-baseline gap-2" aria-label="Harsh Alambain, home">
+          <span className="font-display font-semibold text-[17px] tracking-tight">Harsh Alambain</span>
+          <span className="hidden sm:inline text-[13px] text-muted transition-colors group-hover:text-accent">
+            Interaction Designer
           </span>
         </Link>
 
-        {/* Desktop Navigation with Glow Micro-interactions */}
-        <nav className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => {
-            const isActive =
-              link.href === "/"
-                ? pathname === "/"
-                : link.href.startsWith("/#")
-                  ? false
-                  : pathname.startsWith(link.href);
+        <nav className="hidden md:flex items-center gap-8 text-[14px]" aria-label="Main">
+          {links.map((l) => (
+            <Link
+              key={l.name}
+              href={l.href}
+              aria-current={isActive(l.href) ? "page" : undefined}
+              className={`relative py-1 transition-colors hover:text-ink ${isActive(l.href) ? "text-ink" : "text-ink-2"}`}
+            >
+              {l.name}
+              <span
+                className={`absolute left-0 -bottom-0.5 h-px bg-accent transition-all duration-300 ${
+                  isActive(l.href) ? "w-full" : "w-0"
+                }`}
+              />
+            </Link>
+          ))}
+          <a
+            href={site.resume}
+            target="_blank"
+            rel="noopener"
+            className="pop glow rounded-full border border-ink px-4 py-1.5 hover:bg-ink hover:text-paper"
+          >
+            Résumé
+          </a>
+          <ThemeToggle />
+        </nav>
 
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`relative font-mono text-xs uppercase tracking-widest py-1 transition-all duration-300 group active:scale-95 ${isActive
-                    ? "text-cyan-400 font-semibold drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]"
-                    : "text-neutral-400 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"
-                  }`}
-              >
-                <span className="flex items-center space-x-1">
-                  <span>{link.name}</span>
-                  {link.href.startsWith("/#") && (
-                    <ArrowUpRight className="w-3 h-3 text-neutral-500 group-hover:text-cyan-400 transition-colors" />
-                  )}
-                </span>
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-cyan-400 shadow-[0_0_10px_#22d3ee] transition-all duration-300" />
-                )}
+        <div className="md:hidden flex items-center gap-2">
+        <ThemeToggle />
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="-mr-2 p-2"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+        >
+          <span className="relative block h-3 w-6">
+            <span
+              className={`absolute left-0 h-px w-6 bg-ink transition-all duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`}
+            />
+            <span
+              className={`absolute left-0 h-px w-6 bg-ink transition-all duration-300 ${open ? "top-1.5 -rotate-45" : "top-3"}`}
+            />
+          </span>
+        </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-menu"
+        className={`md:hidden fixed inset-x-0 top-16 bottom-0 bg-paper px-5 pt-8 transition-opacity duration-300 ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
+        <nav className="flex flex-col" aria-label="Mobile">
+          {[...links, { name: "Résumé", href: site.resume }].map((l, i) => {
+            const cls = `font-display text-4xl font-semibold tracking-tight py-3 border-b border-line transition-all duration-500 ${
+              open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+            }`;
+            const style = { transitionDelay: open ? `${80 + i * 50}ms` : "0ms" };
+            return l.href.endsWith(".pdf") ? (
+              <a key={l.name} href={l.href} target="_blank" rel="noopener" style={style} className={cls}>
+                {l.name}
+              </a>
+            ) : (
+              <Link key={l.name} href={l.href} onClick={() => setOpen(false)} style={style} className={cls}>
+                {l.name}
               </Link>
             );
           })}
         </nav>
-
-        {/* Mobile Hamburger Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-neutral-300 hover:text-cyan-400 p-2 focus:outline-none transition-colors active:scale-95"
-          aria-label="Toggle Navigation Menu"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <p className="mt-8 text-sm text-muted">{site.email}</p>
       </div>
-
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-[65px] bg-neutral-950/98 backdrop-blur-xl z-40 border-b border-neutral-800 px-6 py-8 flex flex-col justify-between animate-in fade-in duration-200">
-          <div className="flex flex-col space-y-6 pt-4">
-            {navLinks.map((link) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : link.href.startsWith("/#")
-                    ? false
-                    : pathname.startsWith(link.href);
-
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`font-mono text-xl uppercase tracking-wider py-2 flex items-center justify-between border-b border-neutral-900 active:scale-95 ${isActive
-                      ? "text-cyan-400 font-bold pl-2 border-l-2 border-l-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
-                      : "text-neutral-400 hover:text-white"
-                    }`}
-                >
-                  <span>{link.name}</span>
-                  <ArrowUpRight className="w-5 h-5 text-neutral-600" />
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="border-t border-neutral-900 pt-6 font-mono text-xs text-neutral-500">
-            <p className="uppercase tracking-widest text-neutral-400 mb-1">
-              Harsh Alambain
-            </p>
-            <p>Interaction Designer — Creative Coding & Physical Computing</p>
-            <p className="text-neutral-600 mt-2">alambainharsh@gmail.com</p>
-          </div>
-        </div>
-      )}
     </header>
   );
 };

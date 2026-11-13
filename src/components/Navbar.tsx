@@ -43,6 +43,7 @@ export const Navbar = () => {
   const isActive = (href: string) => href.startsWith("/") && pathname.startsWith(href);
 
   return (
+    <>
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.2,0.7,0.2,1)] border-b ${
         hidden && !open ? "-translate-y-full" : "translate-y-0"
@@ -103,10 +104,12 @@ export const Navbar = () => {
         </button>
         </div>
       </div>
+    </header>
 
+      {/* Kept outside <header>: the header's transform/backdrop-blur would otherwise trap this fixed panel inside its 64px box. */}
       <div
         id="mobile-menu"
-        className={`md:hidden fixed inset-x-0 top-16 bottom-0 bg-paper px-5 pt-8 transition-opacity duration-300 ${
+        className={`md:hidden fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-paper px-5 pt-8 transition-opacity duration-300 ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
@@ -129,6 +132,6 @@ export const Navbar = () => {
         </nav>
         <p className="mt-8 text-sm text-muted">{site.email}</p>
       </div>
-    </header>
+    </>
   );
 };

@@ -14,6 +14,10 @@ const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], 
 const description =
   "Harsh Alambain is an interaction designer and B.Des Interaction & Communication Design student at Anant National University, Ahmedabad. Portfolio of physical computing, creative coding, web design and visual identity work.";
 
+// Accepts either the bare code or the full <meta ... content="CODE" /> tag pasted from Search Console.
+const rawVerification = process.env.GOOGLE_SITE_VERIFICATION?.trim() ?? "";
+const googleVerification = rawVerification.match(/content=["']([^"']+)["']/)?.[1] ?? rawVerification;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -36,7 +40,7 @@ export const metadata: Metadata = {
     "creative technology",
   ],
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
-  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
+  verification: googleVerification ? { google: googleVerification } : undefined,
   openGraph: {
     title: "Harsh Alambain | Interaction Designer",
     description,

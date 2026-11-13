@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ViewTransition } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/projects";
@@ -28,6 +28,7 @@ export function ProjectCard({ project, size = "default", delay = 0 }: Props) {
       onBlur={() => setHover(false)}
       className="group block"
     >
+      <ViewTransition name={`project-${project.slug}`} share="morph" default="none">
       <div
         className={`relative overflow-hidden rounded-[6px] bg-paper-2 ${large ? "aspect-[16/9]" : "aspect-[4/3]"}`}
       >
@@ -49,6 +50,7 @@ export function ProjectCard({ project, size = "default", delay = 0 }: Props) {
           <ArrowUpRight className="h-4 w-4" />
         </span>
       </div>
+      </ViewTransition>
 
       <div className="mt-4 flex items-start justify-between gap-6">
         <div>

@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { RevealObserver } from "@/components/Reveal";
+import { MotionProvider } from "@/components/motion/MotionProvider";
+import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { site } from "@/data/projects";
 import "./globals.css";
 
@@ -131,11 +133,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <Navbar />
-        <main id="main" className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+        <MotionProvider>
+          <ScrollProgress />
+          <Navbar />
+          <main id="main" className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+        </MotionProvider>
         <RevealObserver />
         <Analytics />
       </body>

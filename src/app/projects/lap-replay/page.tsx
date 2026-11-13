@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { ViewTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Maximize2 } from "lucide-react";
 import { ProjectMedia } from "@/components/ProjectMedia";
+import { Parallax } from "@/components/motion/Parallax";
 import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
@@ -113,13 +115,17 @@ export default function LapReplayPage() {
         </dl>
       </header>
 
-      <div data-reveal className="mt-12 aspect-[16/10] overflow-hidden rounded-[8px] bg-[#0d0d10]">
-        <ProjectMedia
-          src="/images/projects/lap-replay.jpg"
-          type="image"
-          alt="Lap Replay at the finish line: the Singapore track coloured blue and red by which driver was faster in each mini-sector, with telemetry cards and a gap graph"
-        />
-      </div>
+      <ViewTransition name="project-lap-replay" share="morph" default="none">
+        <div className="mt-12 aspect-[16/10] overflow-hidden rounded-[8px] bg-[#0d0d10]">
+          <Parallax>
+            <ProjectMedia
+              src="/images/projects/lap-replay.jpg"
+              type="image"
+              alt="Lap Replay at the finish line: the Singapore track coloured blue and red by which driver was faster in each mini-sector, with telemetry cards and a gap graph"
+            />
+          </Parallax>
+        </div>
+      </ViewTransition>
 
       <Section label="01 · Question" title="Where does a third of a second go?">
         <div className="space-y-5 text-[17px] leading-relaxed text-ink-2 max-w-2xl">

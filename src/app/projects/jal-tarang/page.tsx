@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { ViewTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { JalTarang } from "@/components/JalTarang";
 import { ProjectMedia } from "@/components/ProjectMedia";
+import { Parallax } from "@/components/motion/Parallax";
 import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
@@ -103,9 +105,13 @@ export default function JalTarangPage() {
         </dl>
       </header>
 
-      <div data-reveal className="mt-12 aspect-[16/9] overflow-hidden rounded-[8px] bg-ink">
-        <ProjectMedia src="/images/projects/jal-tarang.mp4" type="video" alt="The Jal Tarang installation being played" autoplayInView />
-      </div>
+      <ViewTransition name="project-jal-tarang" share="morph" default="none">
+        <div className="mt-12 aspect-[16/9] overflow-hidden rounded-[8px] bg-ink">
+          <Parallax>
+            <ProjectMedia src="/images/projects/jal-tarang.mp4" type="video" alt="The Jal Tarang installation being played" autoplayInView />
+          </Parallax>
+        </div>
+      </ViewTransition>
 
       <Section label="01 · Idea" title="Can a traditional instrument become a digital interface?">
         <div className="space-y-5 text-[17px] leading-relaxed text-ink-2 max-w-2xl">

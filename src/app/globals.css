@@ -127,6 +127,30 @@
   }
 }
 
+/* Bento tile edge. Invisible in light mode (tiles already contrast with the
+   paper); in dark mode a hairline rim and top highlight keep each tile
+   distinct, and the rim warms to the accent on hover/focus. */
+@utility tile-edge {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: box-shadow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.dark .tile-edge {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.13),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
+}
+.dark .group:hover > .tile-edge,
+.dark .group:focus-within > .tile-edge {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 70%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.16);
+}
+
 /* Live status dot: a gentle fade, so it keeps blinking even with reduced motion */
 @keyframes blink {
   0%, 100% { opacity: 1; }
@@ -171,6 +195,40 @@
   100% { opacity: 0; transform: scale(1.8); }
 }
 
+/* View transitions ------------------------------------------------------ */
+
+/* Clicks pass through to the live page while a transition runs */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Project image morphs from its card into the case-study hero */
+::view-transition-group(.morph) {
+  animation-duration: 480ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+@keyframes via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+/* Theme switch: the circular reveal is driven from ThemeToggle, so turn off
+   the default crossfade and any colour transitions while it runs */
+html.theme-vt::view-transition-old(root),
+html.theme-vt::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.theme-vt *,
+html.theme-vt *::before,
+html.theme-vt *::after {
+  transition: none !important;
+}
+
 /* Reduced motion: drop large movement, keep small hover feedback and the status blink */
 @media (prefers-reduced-motion: reduce) {
   .js [data-reveal] {
@@ -182,5 +240,11 @@
   [style*="slosh"],
   [style*="ring"] {
     animation: none !important;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }

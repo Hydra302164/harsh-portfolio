@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
-import { ProjectCard } from "@/components/ProjectCard";
 import { JalTarang } from "@/components/JalTarang";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { LiveDot } from "@/components/LiveDot";
 import { EnquiryLink } from "@/components/ContactForm";
+import { HeroTitle } from "@/components/motion/HeroTitle";
+import { Magnetic } from "@/components/motion/Magnetic";
+import { BentoWork } from "@/components/motion/BentoWork";
 import { projects, site, webWork } from "@/data/projects";
 
 export const metadata: Metadata = {
@@ -45,8 +47,7 @@ const now = [
 ];
 
 export default function Home() {
-  const featured = projects.find((p) => p.slug === "jal-tarang")!;
-  const rest = projects.filter((p) => p.featured && p.slug !== "jal-tarang");
+  const selected = projects.filter((p) => p.featured);
 
   return (
     <>
@@ -58,13 +59,7 @@ export default function Home() {
               <LiveDot />
               Interaction Designer · Open to internships
             </p>
-            <h1
-              data-reveal
-              style={{ ["--reveal-delay" as string]: "80ms" }}
-              className="mt-6 font-display text-[clamp(2.75rem,7.2vw,6.25rem)] font-semibold leading-[0.95] tracking-[-0.035em]"
-            >
-              I design interactions you can <span className="text-accent">touch</span>, play and see.
-            </h1>
+            <HeroTitle className="mt-6 font-display text-[clamp(2.75rem,7.2vw,6.25rem)] font-semibold leading-[0.95] tracking-[-0.035em]" />
             <p
               data-reveal
               style={{ ["--reveal-delay" as string]: "160ms" }}
@@ -79,6 +74,7 @@ export default function Home() {
               style={{ ["--reveal-delay" as string]: "240ms" }}
               className="mt-10 flex flex-wrap items-center gap-3"
             >
+              <Magnetic>
               <Link
                 href="#work"
                 className="pop glow group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-paper"
@@ -86,6 +82,7 @@ export default function Home() {
                 See selected work
                 <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
               </Link>
+              </Magnetic>
               <a
                 href={site.resume}
                 target="_blank"
@@ -128,14 +125,7 @@ export default function Home() {
             All projects <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
-
-        <ProjectCard project={featured} size="large" />
-
-        <div className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-3">
-          {rest.map((p, i) => (
-            <ProjectCard key={p.slug} project={p} delay={i * 90} />
-          ))}
-        </div>
+        <BentoWork projects={selected} />
       </section>
 
       {/* CLIENT WORK */}

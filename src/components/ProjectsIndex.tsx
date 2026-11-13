@@ -1,24 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ViewTransition, type Ref } from "react";
 import Link from "next/link";
+import { AnimatePresence, m } from "motion/react";
 import { ArrowUpRight, Play, X } from "lucide-react";
 import { categories, projects, type Category, type Project } from "@/data/projects";
 import { ProjectMedia } from "./ProjectMedia";
 
-function Entry({ p }: { p: Project }) {
+function Entry({ p, ref }: { p: Project; ref?: Ref<HTMLElement> }) {
   const [hover, setHover] = useState(false);
   const [playing, setPlaying] = useState(false);
 
   return (
-    <article
+    <m.article
+      ref={ref}
       id={p.slug}
-      data-reveal
+      layout="position"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+      exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.18, ease: "easeIn" } }}
+      transition={{ opacity: { duration: 0.5, ease: [0.2, 0.7, 0.2, 1] }, default: { type: "spring", stiffness: 260, damping: 32 } }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       className="grid gap-6 border-t border-line py-10 md:grid-cols-12 md:gap-10 md:py-14"
     >
       <div className="md:col-span-7">
+        <ViewTransition name={`project-${p.slug}`} share="morph" default="none">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[6px] bg-paper-2">
           {playing && p.liveUrl ? (
             <>
@@ -52,6 +60,7 @@ function Entry({ p }: { p: Project }) {
             </>
           )}
         </div>
+        </ViewTransition>
       </div>
 
       <div className="md:col-span-5 flex flex-col">
@@ -119,7 +128,7 @@ function Entry({ p }: { p: Project }) {
           )}
         </div>
       </div>
-    </article>
+    </m.article>
   );
 }
 
@@ -139,20 +148,32 @@ export function ProjectsIndex() {
               key={o}
               onClick={() => setFilter(o)}
               aria-pressed={active}
-              className={`pop rounded-full border px-4 py-2 text-[14px] ${
-                active ? "glow border-ink bg-ink text-paper" : "border-line hover:border-ink"
+              className={`pop relative rounded-full border px-4 py-2 text-[14px] transition-colors ${
+                active ? "glow border-ink text-paper" : "border-line hover:border-ink"
               }`}
             >
-              {o} <span className={active ? "text-paper/60" : "text-muted"}>{count}</span>
+              {active && (
+                <m.span
+                  layoutId="filter-pill"
+                  aria-hidden
+                  className="absolute -inset-px rounded-full bg-ink"
+                  transition={{ type: "spring", stiffness: 420, damping: 36 }}
+                />
+              )}
+              <span className="relative">
+                {o} <span className={active ? "text-paper/60" : "text-muted"}>{count}</span>
+              </span>
             </button>
           );
         })}
       </div>
 
       <div className="mt-10">
-        {shown.map((p) => (
-          <Entry key={p.slug} p={p} />
-        ))}
+        <AnimatePresence mode="popLayout">
+          {shown.map((p) => (
+            <Entry key={p.slug} p={p} />
+          ))}
+        </AnimatePresence>
       </div>
     </>
   );

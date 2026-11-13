@@ -13,12 +13,34 @@ const getDark = () => document.documentElement.classList.contains("dark");
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const dark = useSyncExternalStore(subscribe, getDark, () => false);
 
-  const toggle = () => {
+  const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const root = document.documentElement;
     const next = !getDark();
-    document.documentElement.classList.toggle("dark", next);
-    try {
-      localStorage.setItem("theme", next ? "dark" : "light");
-    } catch {}
+    const apply = () => {
+      root.classList.toggle("dark", next);
+      try {
+        localStorage.setItem("theme", next ? "dark" : "light");
+      } catch {}
+    };
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || !document.startViewTransition) return apply();
+
+    // The new theme spreads out in a circle from the button.
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    root.classList.add("theme-vt");
+    const vt = document.startViewTransition(apply);
+    vt.ready.then(() => {
+      root.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 560, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)", pseudoElement: "::view-transition-new(root)" },
+      );
+    });
+    vt.finished.finally(() => root.classList.remove("theme-vt"));
   };
 
   return (

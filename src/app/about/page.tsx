@@ -3,7 +3,8 @@ import { ArrowUpRight } from "lucide-react";
 import { site } from "@/data/projects";
 
 export const metadata: Metadata = {
-  title: "About",
+  alternates: { canonical: "/about" },
+  title: { absolute: "About Harsh Alambain | Interaction Designer, Ahmedabad" },
   description:
     "About Harsh Alambain: B.Des Interaction & Communication Design student at Anant National University, freelance web designer and co-founder of the Anant Motorsports Club.",
 };

@@ -6,7 +6,8 @@ import { ProjectMedia } from "@/components/ProjectMedia";
 import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
-  title: "Jal Tarang — Case study",
+  alternates: { canonical: "/projects/jal-tarang" },
+  title: "Jal Tarang case study",
   description:
     "An interactive installation reinterpreting the Jal Tarang: six water-filled glasses, sensed by an Arduino Uno and answered with sound and visuals in TouchDesigner.",
 };

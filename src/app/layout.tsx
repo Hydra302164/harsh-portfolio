@@ -12,23 +12,95 @@ const interTight = Inter_Tight({ variable: "--font-inter-tight", subsets: ["lati
 const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], weight: ["400", "500"] });
 
 const description =
-  "Harsh Alambain is an interaction designer and B.Des student at Anant National University, working across physical computing, creative technology, web design and visual identity.";
+  "Harsh Alambain is an interaction designer and B.Des Interaction & Communication Design student at Anant National University, Ahmedabad. Portfolio of physical computing, creative coding, web design and visual identity work.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Harsh Alambain — Interaction Designer",
-    template: "%s — Harsh Alambain",
+    default: "Harsh Alambain | Interaction Designer & Web Designer",
+    template: "%s | Harsh Alambain",
   },
   description,
+  applicationName: "Harsh Alambain",
+  authors: [{ name: "Harsh Alambain", url: site.url }],
+  creator: "Harsh Alambain",
+  keywords: [
+    "Harsh Alambain",
+    "Alambain",
+    "Harsh Alambain portfolio",
+    "Harsh Alambain designer",
+    "interaction designer",
+    "Anant National University",
+    "web designer Ahmedabad",
+    "web designer Jaipur",
+    "creative technology",
+  ],
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
+  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
   openGraph: {
-    title: "Harsh Alambain — Interaction Designer",
+    title: "Harsh Alambain | Interaction Designer",
     description,
     url: site.url,
     siteName: "Harsh Alambain",
-    type: "website",
+    locale: "en_IN",
+    type: "profile",
+    firstName: "Harsh",
+    lastName: "Alambain",
   },
-  twitter: { card: "summary_large_image", title: "Harsh Alambain — Interaction Designer", description },
+  twitter: { card: "summary_large_image", title: "Harsh Alambain | Interaction Designer", description },
+};
+
+/** Tells search engines this site is the official home of the person "Harsh Alambain". */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${site.url}/#person`,
+      name: "Harsh Alambain",
+      alternateName: ["Alambain", "Harsh A"],
+      givenName: "Harsh",
+      familyName: "Alambain",
+      url: site.url,
+      image: `${site.url}/opengraph-image`,
+      email: `mailto:${site.email}`,
+      jobTitle: "Interaction Designer",
+      description,
+      address: { "@type": "PostalAddress", addressLocality: "Ahmedabad", addressRegion: "Gujarat", addressCountry: "IN" },
+      homeLocation: { "@type": "Place", name: "Jaipur, Rajasthan, India" },
+      alumniOf: [
+        { "@type": "CollegeOrUniversity", name: "Anant National University" },
+        { "@type": "HighSchool", name: "Bhartiya Vidya Bhavan Vidyashram, Jaipur" },
+      ],
+      knowsAbout: [
+        "Interaction design",
+        "Physical computing",
+        "Creative coding",
+        "Web design",
+        "Visual identity",
+        "TouchDesigner",
+        "Projection mapping",
+      ],
+      sameAs: [site.linkedin, site.instagram],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#website`,
+      url: site.url,
+      name: "Harsh Alambain",
+      alternateName: "Harsh Alambain Portfolio",
+      inLanguage: "en-IN",
+      publisher: { "@id": `${site.url}/#person` },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${site.url}/#profile`,
+      url: site.url,
+      name: "Harsh Alambain | Interaction Designer",
+      mainEntity: { "@id": `${site.url}/#person` },
+      isPartOf: { "@id": `${site.url}/#website` },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -46,6 +118,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             __html: `(function(){var d=document.documentElement;d.classList.add('js');var t=null;try{t=localStorage.getItem('theme')}catch(e){}if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark')})()`,
           }}
         />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body className="min-h-screen flex flex-col">
         <a

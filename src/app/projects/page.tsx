@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { ProjectsIndex } from "@/components/ProjectsIndex";
 
 export const metadata: Metadata = {
-  title: "Work",
+  alternates: { canonical: "/projects" },
+  title: { absolute: "Work by Harsh Alambain | Projects & Case Studies" },
   description:
     "Projects by Harsh Alambain across physical computing, creative coding and visual identity, including the Jal Tarang interactive installation.",
 };

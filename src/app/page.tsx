@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -6,6 +7,10 @@ import { ProjectMedia } from "@/components/ProjectMedia";
 import { LiveDot } from "@/components/LiveDot";
 import { EnquiryLink } from "@/components/ContactForm";
 import { projects, site, webWork } from "@/data/projects";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const services = [
   { title: "Design & build", body: "Professional, animated, interactive websites for local businesses, from concept to launch." },

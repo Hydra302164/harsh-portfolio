@@ -112,7 +112,7 @@ function Entry({ p }: { p: Project }) {
                 rel="noopener noreferrer"
                 className="pop group inline-flex items-center gap-2 rounded-full border border-ink/25 px-5 py-3 text-[14px] hover:border-ink"
               >
-                Open in p5.js
+                {p.liveUrl.startsWith("http") ? "Open in p5.js" : "Open full screen"}
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             </>

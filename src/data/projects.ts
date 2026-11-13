@@ -45,8 +45,30 @@ export const projects: Project[] = [
     mediaType: "video",
   },
   {
-    slug: "motorsports-reaction-game",
+    slug: "lap-replay",
     number: "02",
+    title: "Lap Replay",
+    category: "Creative Coding",
+    year: "2026",
+    context: "Independent · Data visualisation",
+    tools: ["p5.js", "OpenF1 API", "Python"],
+    summary: "Verstappen vs Hamilton's fastest Singapore laps, replayed from real F1 telemetry to show where 0.348s is won.",
+    description:
+      "An interactive replay that puts two drivers' fastest-ever laps at Marina Bay on the same track. Both cars move at true speed with live speed, gear and pedal data, the track can be coloured by speed or by who was faster in each of 25 mini-sectors, and a gap graph shows where the time is won and lost.",
+    highlights: [
+      "Built from real position and telemetry data (OpenF1)",
+      "Smooth motion from ~4 readings a second, by modelling distance from speed",
+      "Head-to-head gap compared at the same place on track, not the same time",
+    ],
+    hasCaseStudy: true,
+    featured: true,
+    mediaUrl: "/images/projects/lap-replay.jpg",
+    mediaType: "image",
+    liveUrl: "/lap-replay/index.html",
+  },
+  {
+    slug: "motorsports-reaction-game",
+    number: "03",
     title: "Reaction Time Game",
     category: "Creative Coding",
     year: "2026",
@@ -63,7 +85,7 @@ export const projects: Project[] = [
   },
   {
     slug: "interactive-clock",
-    number: "03",
+    number: "04",
     title: "Interactive Clock",
     category: "Creative Coding",
     year: "2025",
@@ -80,7 +102,7 @@ export const projects: Project[] = [
   },
   {
     slug: "brand-identity",
-    number: "04",
+    number: "05",
     title: "Personal Brand Identity",
     category: "Visual Identity",
     year: "2025",
@@ -97,7 +119,7 @@ export const projects: Project[] = [
   },
   {
     slug: "interactive-soup",
-    number: "05",
+    number: "06",
     title: "Interactive Soup",
     category: "Creative Coding",
     year: "2025",
@@ -114,7 +136,7 @@ export const projects: Project[] = [
   },
   {
     slug: "motorsports-trivia-game",
-    number: "06",
+    number: "07",
     title: "Motorsports Trivia",
     category: "Creative Coding",
     year: "2026",

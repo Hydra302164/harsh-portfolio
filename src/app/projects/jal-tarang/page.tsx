@@ -73,7 +73,7 @@ function Section({ label, title, children }: { label: string; title: string; chi
 }
 
 export default function JalTarangPage() {
-  const next = projects.find((p) => p.slug === "motorsports-reaction-game")!;
+  const next = projects.find((p) => p.slug === "lap-replay")!;
 
   return (
     <article className="mx-auto max-w-[1280px] px-5 md:px-10 pt-28 md:pt-36 pb-24">
@@ -188,7 +188,7 @@ export default function JalTarangPage() {
       </Section>
 
       <Link
-        href={`/projects#${next.slug}`}
+        href={next.hasCaseStudy ? `/projects/${next.slug}` : `/projects#${next.slug}`}
         className="pop glow group mt-6 flex items-end justify-between gap-6 rounded-[10px] border border-white/5 bg-night p-8 md:p-12 text-day"
       >
         <div>
